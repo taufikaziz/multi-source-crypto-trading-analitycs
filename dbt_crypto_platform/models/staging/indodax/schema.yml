@@ -1,0 +1,50 @@
+version: 2
+
+models:
+  - name: stg_indodax__pairs
+    description: "Staging model for Indodax pairs data"
+    columns:
+      - name: pair_id
+        tests:
+          - not_null
+          - unique
+      - name: ticker_id
+      - name: asset_name
+      - name: base_currency
+      - name: quote_currency
+      - name: price_decimal_places
+      - name: min_price
+      - name: max_price
+      - name: min_volume
+      - name: created_at
+      - name: run_id
+      - name: captured_at
+
+  - name: stg_indodax__summaries
+    description: "Staging model for Indodax market summaries"
+    columns:
+      - name: pair_id
+        tests:
+          - not_null
+      - name: last_price
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+      - name: buy_price
+        tests:
+          - not_null
+      - name: sell_price
+        tests:
+          - not_null
+      - name: high_price
+      - name: low_price
+      - name: volume_asset
+      - name: volume_idr
+        tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+      - name: captured_at
+      - name: run_id

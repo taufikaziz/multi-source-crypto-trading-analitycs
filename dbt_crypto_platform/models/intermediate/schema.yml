@@ -1,0 +1,62 @@
+version: 2
+
+models:
+  - name: int_daily_market
+    description: "Daily aggregated market metrics from Indodax summaries"
+    columns:
+      - name: date
+        description: "Aggregation date"
+        tests:
+          - not_null
+      - name: symbol
+        description: "Trading pair symbol"
+        tests:
+          - not_null
+      - name: open_price
+        description: "First price of the day"
+      - name: close_price
+        description: "Last price of the day"
+
+  - name: int_orders_trades
+    description: "Enriched order-trade join combining orders with executed trades"
+    columns:
+      - name: order_id
+        description: "Order identifier"
+        tests:
+          - not_null
+      - name: user_id
+        description: "User who placed the order"
+        tests:
+          - not_null
+
+  - name: int_daily_trading
+    description: "Daily trading activity aggregated by date and symbol"
+    columns:
+      - name: date
+        description: "Aggregation date"
+        tests:
+          - not_null
+      - name: symbol
+        description: "Trading pair symbol"
+        tests:
+          - not_null
+
+  - name: int_user_events_daily
+    description: "Daily user interaction metrics from MongoDB event logs"
+    columns:
+      - name: date
+        description: "Event aggregation date"
+        tests:
+          - not_null
+
+  - name: int_user_trading_activity
+    description: "User-level daily activity combining orders, trades, and event tracking"
+    columns:
+      - name: date
+        description: "Activity date"
+        tests:
+          - not_null
+      - name: user_id
+        description: "User identifier"
+        tests:
+          - not_null

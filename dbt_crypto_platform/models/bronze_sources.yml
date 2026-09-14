@@ -1,0 +1,52 @@
+version: 2
+
+sources:
+  - name: bronze
+    schema: bronze
+    description: "Bronze layer raw data"
+    tables:
+      - name: pairs
+        description: "Indodax pairs data"
+        config:
+          meta:
+            data_provider: indodax
+      - name: summaries
+        description: "Indodax market summaries"
+        config:
+          meta:
+            data_provider: indodax
+      - name: users
+        description: "PostgreSQL users data"
+        config:
+          meta:
+            data_provider: postgresql
+      - name: accounts
+        description: "PostgreSQL accounts data"
+        config:
+          meta:
+            data_provider: postgresql
+      - name: assets
+        description: "PostgreSQL assets data"
+        config:
+          meta:
+            data_provider: postgresql
+      - name: orders
+        description: "PostgreSQL orders data"
+        config:
+          meta:
+            data_provider: postgresql
+      - name: trades
+        description: "PostgreSQL trades data"
+        config:
+          meta:
+            data_provider: postgresql
+      - name: transactions
+        description: "PostgreSQL transactions data"
+        config:
+          meta:
+            data_provider: postgresql
+      - name: user_events
+        description: "MongoDB user events"
+        config:
+          meta:
+            data_provider: mongodb

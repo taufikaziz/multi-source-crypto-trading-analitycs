@@ -1,0 +1,89 @@
+version: 2
+
+models:
+  - name: stg_postgres__users
+    description: "Staging model for PostgreSQL users"
+    columns:
+      - name: user_id
+        tests:
+          - not_null
+          - unique
+      - name: email
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "LIKE '%@%'"
+
+  - name: stg_postgres__accounts
+    description: "Staging model for PostgreSQL accounts"
+    columns:
+      - name: account_id
+        tests:
+          - not_null
+          - unique
+      - name: user_id
+        tests:
+          - not_null
+      - name: currency
+        tests:
+          - not_null
+
+  - name: stg_postgres__assets
+    description: "Staging model for PostgreSQL assets"
+    columns:
+      - name: asset_id
+        tests:
+          - not_null
+          - unique
+      - name: symbol
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_postgres__orders
+    description: "Staging model for PostgreSQL orders"
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+          - unique
+      - name: user_id
+        tests:
+          - not_null
+      - name: pair
+        tests:
+          - not_null
+      - name: order_type
+      - name: status
+      - name: price
+        tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+      - name: quantity
+        tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+
+  - name: stg_postgres__trades
+    description: "Staging model for PostgreSQL trades"
+    columns:
+      - name: trade_id
+        tests:
+          - not_null
+          - unique
+      - name: order_id
+        tests:
+          - not_null
+      - name: price
+        tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+      - name: quantity
+        tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"

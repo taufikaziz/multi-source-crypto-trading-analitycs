@@ -1,0 +1,15 @@
+pandas  
+numpy  
+requests  
+aiohttp  
+aiofiles  
+asyncpg  
+motor  
+psycopg2-binary  
+pymongo  
+faker  
+duckdb  
+python-dotenv  
+dbt-core  
+dbt-duckdb  
+dbt-databricks 

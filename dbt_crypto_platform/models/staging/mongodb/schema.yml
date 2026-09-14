@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: stg_mongodb__user_events
+    description: "Staging model for MongoDB user events"
+    columns:
+      - name: event_id
+        tests:
+          - not_null
+          - unique
+      - name: event_type
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["market_view", "order_created", "order_updated", "login", "logout", "page_view"]
+      - name: user_id
+      - name: session_id
+      - name: event_timestamp
+      - name: event_properties
+      - name: ingested_at

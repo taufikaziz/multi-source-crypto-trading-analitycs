@@ -1,0 +1,57 @@
+﻿# Environment variables
+.env
+airflow-docker/.env
+
+# Python
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Test
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+logs/*
+!logs/.gitkeep
+
+# Local data
+data/bronze/*
+data/silver/*
+data/gold/*
+
+!data/bronze/.gitkeep
+!data/silver/.gitkeep
+!data/gold/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+
+# dbt
+dbt_crypto_platform/target/
+dbt_crypto_platform/logs/
+dbt_crypto_platform/profiles.yml
+
+# DuckDB
+*.duckdb
+# Run outputs (local, never commit)
+e2e_run.log
+.benchmarks/
+
+# Backup files
+*.backup
+airflow-docker/.env.backup
+
+# Airflow runtime logs
+airflow-docker/logs/
+
+# dbt third-party packages (reinstalled via dbt deps)
+dbt_crypto_platform/dbt_packages/
