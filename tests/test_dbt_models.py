@@ -7,9 +7,16 @@ import pytest
 def test_dbt_project_exists():
     """Test that dbt project exists."""
     assert os.path.exists('dbt_crypto_platform/dbt_project.yml')
-    assert os.path.exists('dbt_crypto_platform/profiles.yml')
     assert os.path.exists('dbt_crypto_platform/packages.yml')
 
+
+def test_dbt_profiles_not_committed():
+    import subprocess
+    out = subprocess.run(
+        ["git", "ls-files", "dbt_crypto_platform/profiles.yml"],
+        capture_output=True, text=True, check=True,
+    ).stdout.strip()
+    assert out == ""
 
 def test_dbt_models_exist():
     """Test that all dbt models exist."""
