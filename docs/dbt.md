@@ -12,7 +12,7 @@ dbt Staging (Silver)       [9 models, Materialization: View]
 dbt Intermediate           [5 models, Materialization: View]
            │
            ▼
-dbt Marts (Gold)           [4 models, Materialization: Incremental Merge]
+dbt Marts (Gold)           [4 models, Materialization: Table]
 ```
 
 ## Models Breakdown
@@ -22,7 +22,7 @@ dbt Marts (Gold)           [4 models, Materialization: Incremental Merge]
    - `stg_mongodb__user_events`
 2. **Intermediate**: Join dan normalisasi yang reusable tanpa logic presentasi bisnis:
    - `int_daily_market`, `int_daily_trading`, `int_orders_trades`, `int_user_events_daily`, `int_user_trading_activity`
-3. **Marts / Gold**: Agregasi bisnis final berdimensi harian dengan strategi *merge/upsert*:
+3. **Marts / Gold**: Agregasi bisnis final berdimensi harian dengan materialisasi *table* (rebuild per run):
    - `gold_market_daily` (grain: `date` + `symbol`)
    - `gold_trading_daily` (grain: `date` + `symbol`)
    - `gold_user_activity_daily` (grain: `date`)
