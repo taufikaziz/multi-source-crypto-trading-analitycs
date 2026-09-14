@@ -25,7 +25,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install pytest pytest-asyncio dbt-core
+          pip install pytest pytest-asyncio dbt-core dbt-duckdb
 
       - name: Run Test Suite
         env:
@@ -34,7 +34,24 @@ jobs:
         run: |
           pytest -v
 
+      - name: Generate CI dbt Profile
+        run: |
+          mkdir -p $RUNNER_TEMP/ci_profiles
+          cat > $RUNNER_TEMP/ci_profiles/profiles.yml <<'EOF'
+          crypto_platform:
+            target: dev
+            outputs:
+              dev:
+                type: duckdb
+                path: /tmp/ci_warehouse.duckdb
+          EOF
+
+      - name: Install dbt Packages
+        run: |
+          cd dbt_crypto_platform
+          dbt deps --project-dir .
+
       - name: Validate dbt Syntax & Models
         run: |
           cd dbt_crypto_platform
-          dbt parse --project-dir . --profiles-dir .
+          dbt parse --project-dir . --profiles-dir $RUNNER_TEMP/ci_profiles
