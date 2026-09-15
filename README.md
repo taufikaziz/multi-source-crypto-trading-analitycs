@@ -1,4 +1,4 @@
-﻿# Multi-Source Crypto Trading Analytics Platform
+# Multi-Source Crypto Trading Analytics Platform
 
 A production-grade analytical data platform for analyzing cryptocurrency market data, trading activity, and user behavior from multiple sources.
 
@@ -27,44 +27,44 @@ This platform integrates all data sources to provide comprehensive analytics on:
 ## Architecture
 
 ```
-┌──────────────────┐      ┌──────────────────┐      ┌──────────────────┐
-│   Indodax API    │      │   PostgreSQL     │      │   MongoDB        │
-│   Market Data    │      │  (orders/trades) │      │ (user_events)    │
-└────────┬─────────┘      └────────┬─────────┘      └────────┬─────────┘
-         │ async HTTP              │ async pg         │ async mongo
-         ▼                         ▼                  ▼
-    ┌────────────────────────────────────────────────────┐
-    │           Async Ingestion Layer                    │
-    │   (aiohttp/asyncpg/motor + watermark)              │
-    └────────────────────────────────────────────────────┘
-                              │
-                              ▼
-                    ┌──────────────────┐
-                    │     MinIO        │
-                    │  (Bronze Storage)│
-                    └────────┬─────────┘
-                             │
-                             │ dbt
-                             ▼
-                    ┌──────────────────┐
-                    │       dbt        │
-                    │  (Staging →      │
-                    │   Intermediate → │
-                    │    Marts)        │
-                    └────────┬─────────┘
-                             │
-                             ▼
-                    ┌──────────────────┐
-                    │    Databricks    │
-                    │  SQL Warehouse   │
-                    └────────┬─────────┘
-                             ▲
-                             │
-                    ┌──────────────────┐
-                    │   Airflow 3      │
-                    │  (3 DAGs via     │
-                    │   Dataset)       │
-                    └──────────────────┘
++------------------+      +------------------+      +------------------+
+�   Indodax API    �      �   PostgreSQL     �      �   MongoDB        �
+�   Market Data    �      �  (orders/trades) �      � (user_events)    �
++------------------+      +------------------+      +------------------+
+         � async HTTP              � async pg         � async mongo
+         ?                         ?                  ?
+    +----------------------------------------------------+
+    �           Async Ingestion Layer                    �
+    �   (aiohttp/asyncpg/motor + watermark)              �
+    +----------------------------------------------------+
+                              �
+                              ?
+                    +------------------+
+                    �     MinIO        �
+                    �  (Bronze Storage)�
+                    +------------------+
+                             �
+                             � dbt
+                             ?
+                    +------------------+
+                    �       dbt        �
+                    �  (Staging ?      �
+                    �   Intermediate ? �
+                    �    Marts)        �
+                    +------------------+
+                             �
+                             ?
+                    +------------------+
+                    �    Databricks    �
+                    �  SQL Warehouse   �
+                    +------------------+
+                             ?
+                             �
+                    +------------------+
+                    �   Airflow 3      �
+                    �  (1 DAG via     �
+                    �   5 tasks)       �
+                    +------------------+
 ```
 
 ## Technology Stack
@@ -127,13 +127,13 @@ dbt build --target dev
 
 ```
 src/
-├── ingestion/      # Async extraction clients
-├── storage/        # MinIO abstraction
-├── bronze/         # Bronze layer writing
-├── silver/         # Silver layer (legacy)
-├── gold/           # Gold layer (legacy)
-├── quality/        # Data quality checks
-└── warehouse/      # Databricks loader
++-- ingestion/      # Async extraction clients
++-- storage/        # MinIO abstraction
++-- bronze/         # Bronze layer writing
++-- silver/         # Silver layer (legacy)
++-- gold/           # Gold layer (legacy)
++-- quality/        # Data quality checks
++-- warehouse/      # Databricks loader
 
 airflow-docker/     # Airflow + services
 dbt_crypto_platform/ # dbt project
@@ -144,18 +144,18 @@ tests/              # Test suite
 
 ## Data Flow
 
-1. **Ingestion** (Airflow DAG 1)
+1. **Ingestion** (tasks extract_indodax, extract_postgresql, extract_mongodb - paralel)
    - Async extraction from all sources
    - Write to MinIO Bronze layer
    - Update watermarks only after success
 
-2. **Transformation** (Airflow DAG 2)
+2. **Transformation** (task dbt_build_warehouse)
    - dbt staging (cleaning, normalization)
    - dbt intermediate (joins, enrichment)
    - dbt marts (Gold business metrics)
 
-3. **Warehouse Load** (Airflow DAG 3)
-   - Extract from DuckDB to Databricks
+3. **Warehouse Load** (task load_bronze_to_databricks)
+   - Load Bronze objects from MinIO to Databricks staging
 
 ## Data Quality
 
@@ -172,9 +172,9 @@ pytest tests/
 ```
 
 Test coverage:
-- Ingestion framework (7 tests)
-- dbt models (5 tests)
-- Airflow DAGs (4 tests)
+- Ingestion framework, retry dan source ingestion
+- dbt models, transformer dan quality check
+- Airflow DAG, idempotency dan failure scenarios (total 57 tests, 16 file)
 
 ## Production Deployment
 

@@ -1,4 +1,6 @@
-﻿# DAG Failure Resolution Summary
+# DAG Failure Resolution Summary
+
+> Catatan 2026-09-15: insiden ini terjadi pada iterasi DuckDB (task run_indodax_pipeline). Arsitektur saat ini: MinIO Bronze -> Databricks -> dbt, DAG indodax_market_pipeline tetap dipakai (5 task, @daily). Isi di bawah dipertahankan sebagai arsip.
 
 This document details the step-by-step diagnostic and resolution process for the `indodax_market_pipeline` DAG failure.
 

@@ -7,3 +7,5 @@
 | **ADR-03** | PostgreSQL-backed Watermarking | Pelacakan delta extraction multi-source | Menghilangkan state dependency pada Airflow DB; watermark dapat dipulihkan secara independen. |
 | **ADR-04** | MinIO S3 Object Storage as Bronze First | Menyimpan raw multi-format (JSON + Parquet) | Menyerupai production AWS S3 / Azure Data Lake, kompatibel penuh dengan dbt & Databricks connector. |
 | **ADR-05** | Airflow 3 with LocalExecutor | Orkestrasi pada environment 8 GB RAM | Menghilangkan kebutuhan Celery worker/Redis overhead, tetap mendukung paralel task execution. |
+
+| **ADR-06** | Single compose + single DAG | Seluruh service (postgres, mongo, minio, airflow) di airflow-docker/docker-compose.yml; pipeline 1 DAG 5 task, bukan 3 DAG via Dataset | Keputusan sadar: composite ringan, deviasi dari rencana awal didokumentasikan di sini. |
